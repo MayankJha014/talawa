@@ -435,16 +435,26 @@ Future<void> main() async {
       await tester.pumpAndSettle();
       expect(model.imageFile, isNotNull);
     });
-    testWidgets('Testing if image removal work properly', (tester) async {
+
+    test('Testing if image removal works properly', () {
+      // Initialize the mock callback function
       final notifyListenerCallback = MockCallbackFunction();
+
+      // Initialize the model and add the listener
       final model = EditProfilePageViewModel()
         ..addListener(notifyListenerCallback);
-      model.initialize();
 
-      // testing removeImage
+      // Set the initial state with a non-null imageFile
+      model.imageFile = File('dummy_path'); // Ensure imageFile is non-null
+
+      // Call the removeImage method
       model.removeImage();
-      expect(model.imageFile, null);
-      verify(notifyListenerCallback());
+
+      // Verify that imageFile is now null
+      expect(model.imageFile, isNull);
+
+      // Verify that the listener was notified
+      verify(notifyListenerCallback()).called(1);
     });
 
     // Testing onPressed for firstName
